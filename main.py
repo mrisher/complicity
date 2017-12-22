@@ -17,3 +17,8 @@ def submitted_form():
         email=email,
         site=site,
         comments=comments)
+
+@app.route('/')
+def homepage():
+    return render_template('index.html')
+
