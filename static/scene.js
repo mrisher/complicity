@@ -7,12 +7,18 @@ $(document).ready(function() {
     //          autoplay (default = true)
     //          timeout (in sec)
     var scenes = [
-        {image: 'homescreen', audio: 'click', manual_play:false},
+        {image: 'homescreen', audio: 'click', manual_play:true},
         {image: 'incoming_call', audio: 'ringtone'},
         {image: 'griggs', audio: 'audio-001'},
         {image: 'plane_view', audio: 'audio-002'},
-        {image: 'griggs-alt', timeout: 3},
-        'compass', 'meter', 'reticle', 'griggs', 'apps', 'meter'];
+        {image: 'griggs-alt', audio: 'get_residue'},
+        'apps', 
+        'compass', 
+        'meter', 
+        'reticle', 
+        'griggs', 
+        'apps',
+        'griggs-alt'];
 
     var index = 0;
     loadScene(0);
@@ -33,6 +39,7 @@ $(document).ready(function() {
             timeout = Number(scene['timeout']);
         } else if (typeof scene === 'string') {
             image = scene;
+            timeout = 3;        // default for plain images
         } else
             throw new TypeError('"scenes" array contains invalid type ' + scene);
 
