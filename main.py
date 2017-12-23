@@ -29,10 +29,11 @@ def homepage():
     return render_template('index.html')
 
 
-# Define the sequence of screens (and audio)
+# Define the sequence of scenes (and audio)
 scenes = [
-    {'image': 'griggs', 'audio': 'test1'},
-    'plane_view', 'compass', 'meter', 'reticle', 'griggs', 'apps', 'meter'] 
+    {'image': 'griggs', 'audio': 'audio-001'},
+    {'image': 'plane_view', 'audio': 'audio-002'},
+    'griggs-alt', 'compass', 'meter', 'reticle', 'griggs', 'apps', 'meter'] 
 
 
 @app.route('/app')
@@ -50,7 +51,7 @@ def prototype(index=0):
     else:
         raise TypeError('"scenes" array contains invalid type {}'.format(type(scene)))
     
-    return render_template('screen.html',
+    return render_template('scene.html',
         image=image,
         audio=audio,
         next = index+1)

@@ -6,13 +6,15 @@
 <link rel="stylesheet" href="/static/w3.css">
 <link rel="stylesheet" href="/static/style.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<script type=text/javascript src="{{ url_for('static', filename='jquery.js') }}"></script>
+<script type=text/javascript src="{{ url_for('static', filename='scene.js') }}"></script>
 
 <body>
 <div class="w3-display-container">
-    <a href="/app/{{next}}">
+    <a id='next_scene' href="/app/{{next}}">
     <img class="max_100" src="/images/{{image}}.jpg"/>
     {% if audio is not none %}
-    <audio autoplay>
+    <audio id='scene_audio' autoplay>
         <source src="/audio/{{audio}}.mp3" type="audio/mpeg">
         Test1.mp3
     </audio>
