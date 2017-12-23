@@ -5,7 +5,9 @@ threadsafe: true
 handlers:
 - url: /static
   static_dir: static
-- url: /screens
-  static_dir: screens
+- url: /images
+  static_dir: images
+- url: /audio
+  static_dir: audio
 - url: /.*
   script: main.app

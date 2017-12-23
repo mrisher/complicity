@@ -28,13 +28,30 @@ def submitted_form():
 def homepage():
     return render_template('index.html')
 
+
+# Define the sequence of screens (and audio)
+scenes = [
+    {'image': 'griggs', 'audio': 'test1'},
+    'plane_view', 'compass', 'meter', 'reticle', 'griggs', 'apps', 'meter'] 
+
+
 @app.route('/app')
 @app.route('/app/<int:index>')
 def prototype(index=0):
-    screen_seq = [
-        'griggs', 'plane_view', 'compass', 'meter', 'reticle', 'griggs', 'apps', 'meter'] 
-    # find the screen
+    # find the scene
+    scene=scenes[index]
+    image=None
+    audio=None
+    if (isinstance(scene, dict)):
+        image = scene['image']
+        audio = scene['audio']
+    elif (isinstance(scene, str)):
+        image = scene
+    else:
+        raise TypeError('"scenes" array contains invalid type {}'.format(type(scene)))
+    
     return render_template('screen.html',
-        screen=screen_seq[index],
+        image=image,
+        audio=audio,
         next = index+1)
 

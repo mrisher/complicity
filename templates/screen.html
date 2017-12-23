@@ -10,7 +10,13 @@
 <body>
 <div class="w3-display-container">
     <a href="/app/{{next}}">
-    <img class="max_100" src="/screens/{{screen}}.jpg"/>
+    <img class="max_100" src="/images/{{image}}.jpg"/>
+    {% if audio is not none %}
+    <audio autoplay>
+        <source src="/audio/{{audio}}.mp3" type="audio/mpeg">
+        Test1.mp3
+    </audio>
+    {% endif %}
     </a>
 </div>
 </body>
