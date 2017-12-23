@@ -2,6 +2,7 @@ import logging, base64, os, re
 from flask import Flask, render_template, request
 from flask_talisman import Talisman, GOOGLE_CSP_POLICY
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 # Set up Talisman for app security and CSP
 talisman = Talisman(app, content_security_policy=GOOGLE_CSP_POLICY)
