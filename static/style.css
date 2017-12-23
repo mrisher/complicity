@@ -1,3 +1,23 @@
 .pagetitle {
     color: #800080;
 }
+
+body,h1 {font-family: "Raleway", sans-serif}
+
+body, html {height: 100%}
+
+.bgimg {
+    background-image: url('/static/crowd.jpg');
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+
+.noShow {
+    display: none;
+}
+
+.40_wide {
+    margin:auto;
+    width:40%
+}
