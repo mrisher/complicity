@@ -4,20 +4,6 @@ from flask_talisman import Talisman, GOOGLE_CSP_POLICY
 app = Flask(__name__)
 
 # Set up Talisman for app security and CSP
-
-csp = {
-    # Fonts from fonts.google.com
-    'font-src': '\'self\' themes.googleusercontent.com *.gstatic.com',
-    # <iframe> based embedding for Maps and Youtube.
-    'frame-src': '\'self\' www.google.com www.youtube.com',
-    # Assorted Google-hosted Libraries/APIs.
-    'script-src': '\'self\' ajax.googleapis.com *.googleanalytics.com '
-                  '*.google-analytics.com',
-    # Used by generated code from http://www.google.com/fonts
-    'style-src': '\'self\' ajax.googleapis.com fonts.googleapis.com '
-                 '*.gstatic.com ',
-    'default-src': '\'self\' *.gstatic.com',
-}
 Talisman(app, content_security_policy=GOOGLE_CSP_POLICY)
 
 
@@ -41,4 +27,14 @@ def submitted_form():
 @app.route('/')
 def homepage():
     return render_template('index.html')
+
+@app.route('/app')
+@app.route('/app/<int:index>')
+def prototype(index=0):
+    screen_seq = [
+        'griggs', 'plane_view', 'compass', 'meter', 'reticle', 'griggs', 'apps', 'meter'] 
+    # find the screen
+    return render_template('screen.html',
+        screen=screen_seq[index],
+        next = index+1)
 
