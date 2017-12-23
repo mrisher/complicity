@@ -1,15 +1,22 @@
 $(document).ready(function() {
 
     // Define the sequence of scenes (and audio)
+    // @params:
+    //          image
+    //          audio
+    //          autoplay (default = true)
+    //          timeout (in sec)
     var scenes = [
-        {image: 'homescreen', audio: 'click'},
+        {image: 'homescreen', audio: 'click', manual_play:false},
         {image: 'incoming_call', audio: 'ringtone'},
         {image: 'griggs', audio: 'audio-001'},
         {image: 'plane_view', audio: 'audio-002'},
-        'griggs-alt', 'compass', 'meter', 'reticle', 'griggs', 'apps', 'meter'];
+        {image: 'griggs-alt', timeout: 3},
+        'compass', 'meter', 'reticle', 'griggs', 'apps', 'meter'];
 
     var index = 0;
     loadScene(0);
+    index = 1;
 
     $("#panel_image").click(function() {
         loadScene(index++);
@@ -18,11 +25,12 @@ $(document).ready(function() {
     function loadScene(i) {
         // find the scene
         var scene=scenes[i];
-        var image;
-        var audio;
+        var image, audio, autoplay, timeout;
         if (typeof scene === 'object') {
             image = scene['image'];
             audio = scene['audio'];
+            autoplay = Boolean(scene['manual_play']) ? false : true;
+            timeout = Number(scene['timeout']);
         } else if (typeof scene === 'string') {
             image = scene;
         } else
@@ -34,12 +42,15 @@ $(document).ready(function() {
         // and play audio if we have one
         if (audio === undefined) 
         {
-            //
+            if (timeout > 0)    // if we have audio, timeout is end of track   
+            {
+                setTimeout(function(){ loadScene(index++); }, timeout*1000);
+            }
         }
         else
         {
             $("#mp3_src").attr('src', "/audio/" + audio + ".mp3");
-            if (i > 0)                  // the first time, we need a user click
+            if (autoplay)
             {
                 var player = $("#scene_audio");
                 player[0].pause();
