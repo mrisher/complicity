@@ -9,11 +9,15 @@ $(document).ready(function() {
         'griggs-alt', 'compass', 'meter', 'reticle', 'griggs', 'apps', 'meter'];
 
     var index = 0;
-    $("#panel_image").attr('src', "/images/" + scenes[0]['image'] + ".jpg");
+    loadScene(0);
 
-    $("#panel_image").click(function(){
+    $("#panel_image").click(function() {
+        loadScene(index++);
+    });
+
+    function loadScene(i) {
         // find the scene
-        var scene=scenes[index];
+        var scene=scenes[i];
         var image;
         var audio;
         if (typeof scene === 'object') {
@@ -35,19 +39,18 @@ $(document).ready(function() {
         else
         {
             $("#mp3_src").attr('src', "/audio/" + audio + ".mp3");
-            var player = $("#scene_audio");
-            player[0].pause();
-            player[0].load();
-            player[0].oncanplaythrough = player[0].play();
+            if (i > 0)                  // the first time, we need a user click
+            {
+                var player = $("#scene_audio");
+                player[0].pause();
+                player[0].load();
+                player[0].oncanplaythrough = player[0].play();
+            }
         }
-        index++;
-    });
+    }
 
     $("#scene_audio").bind("ended", function(){
-        window.location.href = $("#next_scene").attr('href');
+        loadScene(index++);
     });
 
-    $("footer").click(function(){
-        $("#scene_audio").trigger("play");
-    });
 });
