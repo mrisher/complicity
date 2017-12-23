@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 .pagetitle {
     color: #800080;
 }

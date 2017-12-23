@@ -11,15 +11,18 @@
 
 <body>
 <div class="w3-display-container">
-    <a id='next_scene' href="/app/{{next}}">
-    <img class="max_100" src="/images/{{image}}.jpg"/>
+    <img id="panel_image" class="max_100" />
     {% if audio is not none %}
-    <audio id='scene_audio' autoplay>
-        <source src="/audio/{{audio}}.mp3" type="audio/mpeg">
+    <audio id='scene_audio'>
+        <source id="mp3_src" src="/audio/click.mp3" type="audio/mpeg">
         Test1.mp3
     </audio>
     {% endif %}
-    </a>
 </div>
+
+<footer class="w3-container w3-teal">
+  <h5>Footer</h5>
+</footer>
+
 </body>
 </html>
