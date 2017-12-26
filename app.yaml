@@ -9,5 +9,7 @@ handlers:
   static_dir: images
 - url: /audio
   static_dir: audio
+- url: /compass
+  static_dir: compass
 - url: /.*
   script: main.app
