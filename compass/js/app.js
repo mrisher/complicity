@@ -11,15 +11,39 @@
     hng: null
   };
 
+  // starting point
+  var startingPoint = {
+    lat: null,
+    lng: null
+  };
+  
+  // initialize the starting point
+  navigator.geolocation.getCurrentPosition(
+       function(pos) {
+         startingPoint.lat = pos.coords.latitude; 
+         startingPoint.lng = pos.coords.longitude;
+       },
+       function(err) {
+        alert(err);
+       },
+       {
+         timeout: 5000,
+         enableHighAccuracy: true,
+         maximumAge: 5000
+       });
 
+                                                      
   // the outer part of the compass that rotates
   var rose = document.getElementById("rose");
+  var pointer = document.getElementById("pointer");
 
 
   // elements that ouput our position
   var positionLat = document.getElementById("position-lat");
   var positionLng = document.getElementById("position-lng");
   var positionHng = document.getElementById("position-hng");
+  var distance = document.getElementById("distance");
+  var hotCold = ["Burning Up", "Hot", "Warmer", "Warm", "Cool", "Ice Cold"];
 
 
   // debug outputs
@@ -201,6 +225,8 @@
       } else if (typeof rose.style.webkitTransform !== "undefined") {
         rose.style.webkitTransform = "rotateZ(" + positionCurrent.hng + "deg)";
       }
+      
+
     } else {
       // device can't show heading
 
@@ -299,18 +325,74 @@
     }
   }
 
-  function locationUpdate(position) {
+function computeHaversineDist(lat1, lon1, lat2, lon2) {
+  function toRad(x) {
+    return x * Math.PI / 180;
+  }
+
+  var R = 6371; // km
+
+  var x1 = lat2 - lat1;
+  var dLat = toRad(x1);
+  var x2 = lon2 - lon1;
+  var dLon = toRad(x2)
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+
+  return Number(d*1000).toFixed(3);
+}
+
+function computeBearing(lat1, lon1, lat2, lon2, unit) {
+  function toRad(x) {
+    return x * Math.PI / 180;
+  }
+  function toDegrees (angle) {
+    return angle * (180 / Math.PI);
+  }
+  var lam1 = toRad(lon1);
+  var lam2 = toRad(lon2);
+  var phi1 = toRad(lat1);
+  var phi2 = toRad(lat2);
+
+  var y = Math.sin(lam2-lam1) * Math.cos(phi2);
+  var x = Math.cos(phi1)*Math.sin(phi2) -
+          Math.sin(phi1)*Math.cos(phi2)*Math.cos(lam2-lam1);
+  var brng = toDegrees(Math.atan2(y, x));
+
+  return (brng);
+}
+
+function locationUpdate(position) {
     positionCurrent.lat = position.coords.latitude;
     positionCurrent.lng = position.coords.longitude;
+    
 
     positionLat.textContent = decimalToSexagesimal(positionCurrent.lat, "lat");
     positionLng.textContent = decimalToSexagesimal(positionCurrent.lng, "lng");
+
+    var dist_in_meters = computeHaversineDist(positionCurrent.lat, positionCurrent.lng, startingPoint.lat,startingPoint.lng);
+    distance.textContent = hotCold[Math.min(hotCold.length-1, Math.floor(dist_in_meters / 3))] + " (" + dist_in_meters + "m)";
+
+    var bearing = computeBearing(positionCurrent.lat, positionCurrent.lng, startingPoint.lat, startingPoint.lng);
+    if (typeof pointer.style.transform !== "undefined") {
+      pointer.style.transform = "rotateZ(" + bearing + "deg)";
+    } else if (typeof pointer.style.webkitTransform !== "undefined") {
+      pointer.style.webkitTransform = "rotateZ(" + bearing + "deg)";
+    }
   }
 
   function locationUpdateFail(error) {
     positionLat.textContent = "n/a";
     positionLng.textContent = "n/a";
+    distance.textContent = "n/a";
     console.log("location fail: ", error);
+  }
+
+  function displayLocation() {
+    alert("Location: " + positionCurrent.lat + "; " + positionCurrent.lng);
   }
 
   function setNightmode(on) {
@@ -403,6 +485,7 @@
   btnLockOrientation.addEventListener("click", toggleOrientationLock);
   btnNightmode.addEventListener("click", toggleNightmode);
   btnMap.addEventListener("click", openMap);
+  distance.addEventListener("click", displayLocation);
 
   var i;
   for (i=0; i<btnsPopup.length; i++) {
@@ -413,9 +496,9 @@
   popupContents.addEventListener("click", popupContentsClick);
 
   navigator.geolocation.watchPosition(locationUpdate, locationUpdateFail, {
-    enableHighAccuracy: false,
-    maximumAge: 30000,
-    timeout: 27000
+    enableHighAccuracy: true,
+    maximumAge: 5000,
+    timeout: 4500
   });
 
   setNightmode(false);
