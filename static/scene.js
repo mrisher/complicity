@@ -1,3 +1,4 @@
+/*eslint-env jquery */
 $(document).ready(function() {
 
     // Define the sequence of scenes (and audio)
@@ -28,6 +29,13 @@ $(document).ready(function() {
         loadScene(index++);
     });
 
+
+    /**
+     * @name loadScene
+     * @description populates the image, loads the audio
+     * @param i: index of the scene (from 'scenes' array)
+     * @returns void
+     */
     function loadScene(i) {
         // find the scene
         var scene=scenes[i];
