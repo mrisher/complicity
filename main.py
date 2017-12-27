@@ -5,7 +5,7 @@ app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 # Set up Talisman for app security and CSP
-talisman = Talisman(app, content_security_policy=GOOGLE_CSP_POLICY)
+#talisman = Talisman(app, content_security_policy=GOOGLE_CSP_POLICY)
 
 # Generate a Nonce for CSP inline script blocks
 def GetCspNonce():
@@ -37,10 +37,10 @@ def homepage():
 
 @app.route('/app')
 def run_prototype():
-    script_src = re.sub(r'\'nonce-.*\'', '', talisman.content_security_policy['script-src'])
+    #script_src = re.sub(r'\'nonce-.*\'', '', talisman.content_security_policy['script-src'])
     nonce = GetCspNonce();
-    script_src = script_src + ' \'nonce-{}\' '.format(nonce)
-    logging.info("script_src = '{}'".format(script_src))
-    talisman.content_security_policy['script-src'] = script_src 
+    #script_src = script_src + ' \'nonce-{}\' '.format(nonce)
+    #logging.debug("script_src = '{}'".format(script_src))
+    #talisman.content_security_policy['script-src'] = script_src 
     return render_template('scene.html', nonce=nonce)
 

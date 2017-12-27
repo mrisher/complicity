@@ -8,19 +8,21 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <script type=text/javascript src="{{ url_for('static', filename='jquery.js') }}"></script>
 <script type=text/javascript src="{{ url_for('static', filename='scene.js') }}"></script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoJAcxxMYCl2yudzcCLa70oZHgTm3TuLU&callback=initMap">
+</script>
 
 <script nonce="{{nonce}}" type="application/json" id="scenes">
 </script>
 
 <body>
+    <div id="map"></div>
 <div class="w3-display-container">
     <img id="panel_image" class="max_100" />
-    {% if audio is not none %}
     <audio id='scene_audio'>
         <source id="mp3_src" src="/audio/click.mp3" type="audio/mpeg">
         Test1.mp3
     </audio>
-    {% endif %}
 </div>
 
 </body>
