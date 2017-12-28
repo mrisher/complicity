@@ -110,7 +110,8 @@ var map, infoWindow, marker, target;
             marker = new google.maps.Marker({
                 position: pos,
                 map: map,
-                title: 'Hello World!'
+                title: 'Hello World!',
+                icon: "/images/blue_ring.png",
             });        
             map.setCenter(pos);
 
@@ -146,6 +147,9 @@ var map, infoWindow, marker, target;
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
+        var dist = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(pos), target.getPosition());
+        if (dist < 1.5)
+            alert("You win!");
         marker.setPosition(pos);
     }
 
