@@ -1,6 +1,4 @@
-/* jslint-env jquery */
-$(document).ready(function() {
-
+function main() {
     // Define the sequence of scenes (and audio)
     // @params:
     //          image
@@ -89,7 +87,7 @@ $(document).ready(function() {
         loadScene(index++);
     });
 
-});    
+}    
 
 var map, infoWindow, marker, target;
     function initMap() {

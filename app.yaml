@@ -11,5 +11,7 @@ handlers:
   static_dir: audio
 - url: /compass
   static_dir: compass
+- url: /scripts
+  static_dir: scripts
 - url: /.*
   script: main.app
