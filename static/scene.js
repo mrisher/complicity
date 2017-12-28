@@ -1,6 +1,4 @@
-
-ls
-/*eslint-env jquery */
+/*jslint-env jquery */
 $(document).ready(function() {
 
     // Define the sequence of scenes (and audio)
@@ -47,6 +45,10 @@ $(document).ready(function() {
             if (scene.special == 'map') {
                 $("#map").show();
                 initMap();
+                navigator.geolocation.watchPosition(updateLocation, function(){alert('error in watchPosition')}, 
+                    {enableHighAccuracy: true,
+                    maximumAge: 5000,
+                    timeout: 4500});
             }
             else {
                 image = scene.image;
@@ -90,11 +92,11 @@ $(document).ready(function() {
 
 });    
 
-var map, infoWindow, marker;
+var map, infoWindow, marker, target;
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: -34.397, lng: 150.644},
-          zoom: 17
+          zoom: 20,
         });
         infoWindow = new google.maps.InfoWindow();
 
@@ -111,6 +113,16 @@ var map, infoWindow, marker;
                 title: 'Hello World!'
             });        
             map.setCenter(pos);
+
+            targetPos = pos;
+            targetPos.lat += 0.00008;
+            targetPos.lng -= 0.00006;
+
+            target = new google.maps.Marker({
+                position: targetPos,
+                map: map,
+                icon: "/images/alien.png",
+            });
           }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
           });
@@ -129,4 +141,11 @@ var map, infoWindow, marker;
         infoWindow.open(map);
     }
 
+    function updateLocation(position) {
+        var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+        marker.setPosition(pos);
+    }
 
