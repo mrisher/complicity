@@ -42,15 +42,15 @@ $(document).ready(function() {
         var scene=scenes[i];
         var image, audio, autoplay, timeout;
         if (typeof scene === 'object') {
-            if (scene['special'] == 'map') {
+            if (scene.special == 'map') {
                 $("#map").show();
                 initMap();
             }
             else {
-                image = scene['image'];
-                audio = scene['audio'];
-                autoplay = Boolean(scene['manual_play']) ? false : true;
-                timeout = Number(scene['timeout']);
+                image = scene.image;
+                audio = scene.audio;
+                autoplay = Boolean(scene.manual_play) ? false : true;
+                timeout = Number(scene.timeout);
             }
         } else if (typeof scene === 'string') {
             image = scene;
@@ -94,7 +94,7 @@ var map, infoWindow, marker;
           center: {lat: -34.397, lng: 150.644},
           zoom: 17
         });
-        infoWindow = new google.maps.InfoWindow;
+        infoWindow = new google.maps.InfoWindow();
 
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
