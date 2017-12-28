@@ -14,6 +14,7 @@ $(document).ready(function() {
         {image: 'plane_view', audio: 'audio-002'},
         {image: 'griggs-alt', audio: 'get_residue'},
         'apps', 
+        {special: 'map'},
         'compass', 
         'meter', 
         'reticle', 
@@ -41,10 +42,16 @@ $(document).ready(function() {
         var scene=scenes[i];
         var image, audio, autoplay, timeout;
         if (typeof scene === 'object') {
-            image = scene['image'];
-            audio = scene['audio'];
-            autoplay = Boolean(scene['manual_play']) ? false : true;
-            timeout = Number(scene['timeout']);
+            if (scene['special'] == 'map') {
+                $("#map").show();
+                initMap();
+            }
+            else {
+                image = scene['image'];
+                audio = scene['audio'];
+                autoplay = Boolean(scene['manual_play']) ? false : true;
+                timeout = Number(scene['timeout']);
+            }
         } else if (typeof scene === 'string') {
             image = scene;
             timeout = 3;        // default for plain images
@@ -81,11 +88,11 @@ $(document).ready(function() {
 
 });    
 
-var map, infoWindow;
+var map, infoWindow, marker;
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: -34.397, lng: 150.644},
-          zoom: 6
+          zoom: 17
         });
         infoWindow = new google.maps.InfoWindow;
 
@@ -96,10 +103,11 @@ var map, infoWindow;
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
-
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Location found.');
-            infoWindow.open(map);
+            marker = new google.maps.Marker({
+                position: pos,
+                map: map,
+                title: 'Hello World!'
+            });        
             map.setCenter(pos);
           }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
@@ -111,10 +119,12 @@ var map, infoWindow;
     }
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        alert("Error");
         infoWindow.setPosition(pos);
         infoWindow.setContent(browserHasGeolocation ?
                               'Error: The Geolocation service failed.' :
                               'Error: Your browser doesn\'t support geolocation.');
         infoWindow.open(map);
     }
+
 

@@ -43,4 +43,3 @@ def run_prototype():
     #logging.debug("script_src = '{}'".format(script_src))
     #talisman.content_security_policy['script-src'] = script_src 
     return render_template('scene.html', nonce=nonce)
-

@@ -33,4 +33,5 @@ body, html {height: 100%}
 
 #map {
     height: 100%;
+    display: none;
 }
