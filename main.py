@@ -36,10 +36,11 @@ def homepage():
 
 
 @app.route('/app')
-def run_prototype():
+@app.route('/app/<int:start>')
+def run_prototype(start = 0):
     #script_src = re.sub(r'\'nonce-.*\'', '', talisman.content_security_policy['script-src'])
     nonce = GetCspNonce();
     #script_src = script_src + ' \'nonce-{}\' '.format(nonce)
     #logging.debug("script_src = '{}'".format(script_src))
     #talisman.content_security_policy['script-src'] = script_src 
-    return render_template('scene.html', nonce=nonce)
+    return render_template('scene.html', start=start, nonce=nonce)

@@ -1,4 +1,4 @@
-/*jslint-env jquery */
+/* jslint-env jquery */
 $(document).ready(function() {
 
     // Define the sequence of scenes (and audio)
@@ -22,9 +22,8 @@ $(document).ready(function() {
         'apps',
         'griggs-alt'];
 
-    var index = 0;
-    loadScene(0);
-    index = 1;
+    var index = JSON.parse($("#main_storyboard").data("starting-index"));
+    loadScene(index++);
 
     $("#panel_image").click(function() {
         loadScene(index++);
@@ -45,7 +44,7 @@ $(document).ready(function() {
             if (scene.special == 'map') {
                 $("#map").show();
                 initMap();
-                navigator.geolocation.watchPosition(updateLocation, function(){alert('error in watchPosition')}, 
+                navigator.geolocation.watchPosition(updateLocation, function(){alert('error in watchPosition');}, 
                     {enableHighAccuracy: true,
                     maximumAge: 5000,
                     timeout: 4500});
@@ -95,7 +94,7 @@ $(document).ready(function() {
 var map, infoWindow, marker, target;
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
+          // center: {lat: -34.397, lng: 150.644},
           zoom: 20,
         });
         infoWindow = new google.maps.InfoWindow();
@@ -114,16 +113,7 @@ var map, infoWindow, marker, target;
                 icon: "/images/blue_ring.png",
             });        
             map.setCenter(pos);
-
-            targetPos = pos;
-            targetPos.lat += 0.00008;
-            targetPos.lng -= 0.00006;
-
-            target = new google.maps.Marker({
-                position: targetPos,
-                map: map,
-                icon: "/images/alien.png",
-            });
+            createTarget(pos);
           }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
           });
@@ -142,14 +132,36 @@ var map, infoWindow, marker, target;
         infoWindow.open(map);
     }
 
+
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    function createTarget(position) {
+        targetPos = position;
+        var meter_in_degrees = 0.00002;
+        targetPos.lat += getRandomArbitrary(-10, 10) * meter_in_degrees;
+        targetPos.lng += getRandomArbitrary(-10, 10) * meter_in_degrees;
+
+        target = new google.maps.Marker({
+            position: targetPos,
+            map: map,
+            icon: "/images/alien.png",
+            animation: google.maps.Animation.BOUNCE,
+        });
+    }
+
     function updateLocation(position) {
         var pos = {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
         var dist = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(pos), target.getPosition());
-        if (dist < 1.5)
+        if (dist < 3.0)         // distance in meters
+        {
             alert("You win!");
+            createTarget(pos);
+        }
         marker.setPosition(pos);
     }
 
