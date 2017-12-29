@@ -17,3 +17,7 @@ handlers:
   static_dir: scripts
 - url: /.*
   script: main.app
+
+skip_files:
+- vue-project/node_modules/
+- .git/
