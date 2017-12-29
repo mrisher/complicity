@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <scene v-for="scene in scenes" v-bind:scene_item="scene" :key="scene.id"></scene>
+    <scene v-bind:scene_item="scenes[index]" v-on:advanceScene="advanceScene"
+    ></scene>
   </div>
 </template>
 
@@ -12,6 +13,7 @@ export default {
   components: {Scene},
   data () {
     return {
+      index: 0,
       scenes: [
         {id: 0, backdrop: 'homescreen', audio_file: 'click', manual_play: true},
         {id: 1, backdrop: 'incoming_call', audio_file: 'ringtone'},
@@ -26,6 +28,11 @@ export default {
         {id: 10, backdrop: 'griggs'},
         {id: 11, backdrop: 'apps'},
         {id: 12, backdrop: 'griggs-alt'}]
+    }
+  },
+  methods: {
+    advanceScene: function () {
+      this.index++
     }
   }
 }

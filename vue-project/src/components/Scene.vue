@@ -1,6 +1,6 @@
 <template>
   <div id="stage" class="w3-display-container">
-    <backdrop v-bind:image="scene_item.backdrop"></backdrop>
+    <backdrop v-bind:image="scene_item.backdrop" v-on:advanceScene="advanceScene"></backdrop>
     <soundtrack v-bind:audio_file="scene_item.audio_file"></soundtrack>
   </div>
 </template>
@@ -18,6 +18,11 @@ export default {
   },
   data () {
     return {
+    }
+  },
+  methods: {
+    advanceScene: function () {
+      this.$emit('advanceScene')
     }
   }
 }
