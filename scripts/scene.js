@@ -27,9 +27,6 @@ function main() {
         loadScene(index++);
     });
 
-    //Apply kalman filter
-    var latFilter = new KalmanLatLong(3);
-    var lngFilter = new KalmanLatLong(3);
 
     /**
      * @name loadScene

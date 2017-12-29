@@ -1,3 +1,3 @@
-requirejs(['jquery', 'kalman', "scene"], function(scene){
+requirejs(['jquery', "scene"], function(scene){
     main();
 });
