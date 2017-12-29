@@ -1,7 +1,5 @@
 <template>
-  <img id="backdrop" class="max_100" v-bind:src="getImageFileName"
-    v-on:click="advanceScene"
-  />
+  <img id="backdrop" class="max_100" v-bind:src="getImageFileName" />
 </template>
 
 <script>
@@ -13,9 +11,6 @@ export default {
     }
   },
   methods: {
-    advanceScene: function () {
-      this.$emit('advanceScene')
-    }
   }
 }
 </script>
