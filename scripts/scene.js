@@ -27,6 +27,9 @@ function main() {
         loadScene(index++);
     });
 
+    //Apply kalman filter
+    var latFilter = new KalmanLatLong(3);
+    var lngFilter = new KalmanLatLong(3);
 
     /**
      * @name loadScene
@@ -151,9 +154,11 @@ var map, infoWindow, marker, target;
 
     function updateLocation(position) {
         var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
+           lat: position.coords.latitude,
+           lng: position.coords.longitude
+        };
+        if (position.coords.accuracy > 15)
+            return;             // ignore reading if accuracy > 15
         var dist = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(pos), target.getPosition());
         if (dist < 3.0)         // distance in meters
         {
