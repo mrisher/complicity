@@ -1,6 +1,12 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <div id="main_storyboard" class="w3-display-container" data-starting-index="0">
+        <img id="panel_image" class="max_100" />
+            <audio id='scene_audio'>
+                <source id="mp3_src" src="/audio/click.mp3" type="audio/mpeg">
+                Test1.mp3
+            </audio>
+    </div>
     <router-view/>
   </div>
 </template>
