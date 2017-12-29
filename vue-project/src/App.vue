@@ -1,36 +1,31 @@
 <template>
   <div id="app">
-    <div id="stage" class="w3-display-container" data-starting-index="0">
-        <img id="backdrop" class="max_100" />
-            <audio id='soundtrack'>
-                <source id="mp3_src" src="/audio/click.mp3" type="audio/mpeg">
-                Test1.mp3
-            </audio>
-    </div>
+    <scene v-for="scene in scenes" v-bind:scene_item="scene" :key="scene.id"></scene>
   </div>
 </template>
 
 <script>
-import SceneList from './components/SceneList.vue'
+import Scene from './components/Scene.vue'
 
 export default {
   name: 'app',
+  components: {Scene},
   data () {
     return {
       scenes: [
-        {backdrop: 'homescreen', audio: 'click', manual_play: true},
-        {backdrop: 'incoming_call', audio: 'ringtone'},
-        {backdrop: 'griggs', audio: 'audio-001'},
-        {backdrop: 'plane_view', audio: 'audio-002'},
-        {backdrop: 'griggs-alt', audio: 'get_residue'},
-        'apps',
-        {special: 'map'},
-        'compass',
-        'meter',
-        'reticle',
-        'griggs',
-        'apps',
-        'griggs-alt']
+        {id: 0, backdrop: 'homescreen', audio_file: 'click', manual_play: true},
+        {id: 1, backdrop: 'incoming_call', audio_file: 'ringtone'},
+        {id: 2, backdrop: 'griggs', audio_file: 'audio-001'},
+        {id: 3, backdrop: 'plane_view', audio_file: 'audio-002'},
+        {id: 4, backdrop: 'griggs-alt', audio_file: 'get_residue'},
+        {id: 5, backdrop: 'apps'},
+        {id: 6, special: 'map'},
+        {id: 7, backdrop: 'compass'},
+        {id: 8, backdrop: 'meter'},
+        {id: 9, backdrop: 'reticle'},
+        {id: 10, backdrop: 'griggs'},
+        {id: 11, backdrop: 'apps'},
+        {id: 12, backdrop: 'griggs-alt'}]
     }
   }
 }
