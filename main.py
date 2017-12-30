@@ -1,7 +1,7 @@
 import logging, base64, os, re
 from flask import Flask, render_template, request, current_app
 from flask_talisman import Talisman, GOOGLE_CSP_POLICY
-app = Flask(__name__, static_folder='vue-project/dist')
+app = Flask(__name__, static_folder='dist')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 # Set up Talisman for app security and CSP

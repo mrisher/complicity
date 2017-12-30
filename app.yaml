@@ -4,7 +4,7 @@ threadsafe: true
 
 handlers:
 - url: /static
-  static_dir: vue-project/dist/static
+  static_dir: dist/static
 - url: /images
   static_dir: images
 - url: /styles
@@ -19,5 +19,5 @@ handlers:
   script: main.app
 
 skip_files:
-- vue-project/node_modules/
+- node_modules/
 - .git/
