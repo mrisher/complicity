@@ -1,6 +1,6 @@
 <template>
   <div id="stage" class="w3-display-container">
-<!--    <backdrop v-bind:image="sceneItem.backdrop" v-on:click.native="advanceScene"></backdrop> -->
+    <backdrop v-bind:image="sceneItem.backdrop" v-on:click.native="advanceScene"></backdrop>
     <alien-map v-bind:num-targets="3"></alien-map>
   </div>
 </template>
