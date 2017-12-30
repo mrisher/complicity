@@ -1,20 +1,21 @@
 <template>
-  <audio ref='scene_audio' v-on:canplaythrough="play" v-on:ended="onEnded">
-    <source id="mp3_src" v-bind:src="audioFile" type="audio/mpeg">
-    Test1.mp3
-  </audio>
+  <div>
+    <div class="transparent_full_screen_click_layer" v-on:click="play" v-if="clickToPlay"></div>
+    <audio ref='scene_audio' v-on:canplaythrough="play" v-on:ended="onEnded">
+      <source v-bind:src="audioFile" type="audio/mpeg">
+    </audio>
+  </div>
 </template>
 
 <script>
 export default {
   props: {
     audioFile: {
-      type: String,
-      default: ''
+      type: String
     },
-    autoPlay: {
+    clickToPlay: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   methods: {
@@ -33,3 +34,14 @@ export default {
   }
 }
 </script>
+
+<style>
+div.transparent_full_screen_click_layer {
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:5;
+    width:100%;
+    height:100%;
+}
+</style>

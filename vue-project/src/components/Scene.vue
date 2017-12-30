@@ -1,6 +1,6 @@
 <template>
   <div id="stage" class="w3-display-container">
-    <backdrop v-bind:image="scene_item.backdrop" v-on:click.native="advanceScene"></backdrop>
+    <backdrop v-bind:image="sceneItem.backdrop" v-on:click.native="advanceScene"></backdrop>
   </div>
 </template>
 
@@ -9,7 +9,7 @@ import Backdrop from './Backdrop.vue'
 
 export default {
   name: 'Scene',
-  props: ['scene_item'],
+  props: ['sceneItem'],
   components: {
     Backdrop
   },
@@ -20,6 +20,14 @@ export default {
   methods: {
     advanceScene: function () {
       this.$emit('advanceScene')
+    }
+  },
+  updated: function () {
+    if (this.sceneItem.timeout) {
+      this.$nextTick(function () {
+        // set a timeout
+        setTimeout(() => { this.advanceScene() }, this.sceneItem.timeout * 1000)
+      })
     }
   }
 }
