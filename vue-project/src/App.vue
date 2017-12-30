@@ -1,28 +1,29 @@
 <template>
   <div id="app">
     <scene v-bind:scene_item="scenes[index]" v-on:advanceScene="advanceScene"></scene>
-    <audio ref='scene_audio'>
-      <source id="mp3_src" v-bind:src="getAudioFileName()" type="audio/mpeg">
-      Test1.mp3
-    </audio>
+    <soundtrack v-bind:audio-file="getAudioFileName" 
+      v-bind:autoPlay="autoPlay"
+      v-on:advanceScene="advanceScene">
+    </soundtrack>
   </div>
 </template>
 
 <script>
 import Scene from './components/Scene.vue'
+import Soundtrack from './components/Soundtrack.vue'
 
 export default {
   name: 'app',
-  components: {Scene},
+  components: {Scene, Soundtrack},
   data () {
     return {
       index: 0,
       scenes: [
-        {id: 0, backdrop: 'homescreen', audio_file: 'click', manual_play: true},
-        {id: 1, backdrop: 'incoming_call', audio_file: 'ringtone'},
-        {id: 2, backdrop: 'griggs', audio_file: 'audio-001'},
-        {id: 3, backdrop: 'plane_view', audio_file: 'audio-002'},
-        {id: 4, backdrop: 'griggs-alt', audio_file: 'get_residue'},
+        {id: 0, backdrop: 'homescreen', audioFile: 'click', clickToPlay: true},
+        {id: 1, backdrop: 'incoming_call', audioFile: 'ringtone'},
+        {id: 2, backdrop: 'griggs', audioFile: 'audio-001'},
+        {id: 3, backdrop: 'plane_view', audioFile: 'audio-002'},
+        {id: 4, backdrop: 'griggs-alt', audioFile: 'get_residue'},
         {id: 5, backdrop: 'apps'},
         {id: 6, special: 'map'},
         {id: 7, backdrop: 'compass'},
@@ -33,22 +34,33 @@ export default {
         {id: 12, backdrop: 'griggs-alt'}]
     }
   },
-  methods: {
+  computed: {
     getAudioFileName: function () {
-      return '/static/audio/' + this.scenes[this.index].audio_file + '.mp3'
+      if (this.scenes[this.index].audioFile === undefined) {
+        return null
+      } else {
+        return '/static/audio/' + this.scenes[this.index].audioFile + '.mp3'
+      }
     },
+    autoPlay: function () {
+      return (this.scenes[this.index].clickToPlay)
+    }
+  },
+  methods: {
     playAudio: function () {
       var player = this.$refs.scene_audio
       player.pause()
       player.load()
       player.oncanplaythrough = player.play()
     },
-    advanceScene: function () {
-      this.index++
-      var audioFile = this.scenes[this.index].audio_file
+    loadScene: function (index) {
+      var audioFile = this.scenes[index].audioFile
       if (audioFile !== undefined) {
         this.playAudio()
       }
+    },
+    advanceScene: function () {
+      this.index++
     }
   }
 }
