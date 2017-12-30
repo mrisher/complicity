@@ -1,7 +1,10 @@
 <template>
   <div id="app">
-    <scene v-bind:scene_item="scenes[index]" v-on:advanceScene="advanceScene"
-    ></scene>
+    <scene v-bind:scene_item="scenes[index]" v-on:advanceScene="advanceScene"></scene>
+    <audio ref='scene_audio'>
+      <source id="mp3_src" v-bind:src="getAudioFileName()" type="audio/mpeg">
+      Test1.mp3
+    </audio>
   </div>
 </template>
 
@@ -31,8 +34,21 @@ export default {
     }
   },
   methods: {
+    getAudioFileName: function () {
+      return '/static/audio/' + this.scenes[this.index].audio_file + '.mp3'
+    },
+    playAudio: function () {
+      var player = this.$refs.scene_audio
+      player.pause()
+      player.load()
+      player.oncanplaythrough = player.play()
+    },
     advanceScene: function () {
       this.index++
+      var audio_file = this.scenes[this.index].audio_file
+      if (audio_file !== undefined) {
+        this.playAudio()
+      }
     }
   }
 }
