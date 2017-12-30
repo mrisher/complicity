@@ -25,7 +25,7 @@ export default {
         {backdrop: 'plane_view', audioFile: 'audio-002'},
         {backdrop: 'griggs-alt', audioFile: 'get_residue'},
         {backdrop: 'apps', timeout: 3},
-        {special: 'map'},
+        {map: 'minigame-1'},
         {backdrop: 'compass'},
         {backdrop: 'meter'},
         {backdrop: 'reticle'},
