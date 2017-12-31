@@ -1,7 +1,7 @@
 <template>
   <GmapMap
     ref="main-map"
-    :center="center"
+    :center="mapCenter"
     :zoom="20"
     style="width: 100%; height: 600px"
   >
@@ -10,7 +10,9 @@
       icon= '/static/images/blue_ring.png'
     />
     <GmapMarker
-      :position="targetPos"
+      :key="index"
+      v-for="(target, index) in targets"
+      :position="target"
       icon="/static/images/alien.png"
       :animation=1
     />
@@ -33,8 +35,8 @@ export default {
   data: function () {
     return {
       playerPos: {lat: 20.0, lng: 20.0},
-      center: {lat: 10.0, lng: 10.0},
-      targetPos: {lat: 20.0, lng: 20.0}
+      mapCenter: {lat: 10.0, lng: 10.0},
+      targets: []
     }
   },
   mounted: function () {
@@ -45,8 +47,15 @@ export default {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         }
-        this.center = pos
-        this.targetPos = this.getNearbyPos(pos)
+
+        // center the map on current position
+        this.mapCenter = pos
+
+        // create us an array of targets
+        for (var i = 0; i < this.numTargets; i++) {
+          var newTargetPos = this.getNearbyPos(pos)
+          this.targets.push(newTargetPos)
+        }
       }, () => {
         this.handleLocationError(true)
       })
@@ -107,11 +116,18 @@ export default {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       }
-      var dist = this.computeHaversineDist(
-        pos.lat, pos.lng, this.targetPos.lat, this.targetPos.lng)
-      if (dist < 3.0) {        // distance in meters
-        alert('You win!')
-        this.targetPos = this.getNearbyPos(pos)
+      var dist
+      if (this.targets.length) {
+        this.targets.forEach((target, index) => {
+          dist = this.computeHaversineDist(pos.lat, pos.lng, target.lat, target.lng)
+          if (dist < 3.0) {        // distance in meters
+            alert('You caught #' + index)
+            this.targets.splice(index, 1)  // remove 'index'
+            if (this.targets.length === 0) {
+              this.$emit('gameWon')
+            }
+          }
+        })
       }
       this.playerPos = pos
     }
