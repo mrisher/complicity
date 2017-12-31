@@ -9,8 +9,6 @@ export default {
     getImageFileName: function () {
       return '/static/images/' + this.image + '.jpg'
     }
-  },
-  methods: {
   }
 }
 </script>
