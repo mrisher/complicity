@@ -32,8 +32,6 @@ export default {
   props: ['numTargets'],
   data: function () {
     return {
-      map: null,
-      infoWindow: null,
       playerPos: {lat: 20.0, lng: 20.0},
       center: {lat: 10.0, lng: 10.0},
       targetPos: {lat: 20.0, lng: 20.0}
@@ -56,11 +54,7 @@ export default {
       // now set up a watcher
       navigator.geolocation.watchPosition(
         position => {
-          var pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          }
-          this.updateLocation(pos)
+          this.updateLocation(position)
         },
         function () {
           alert('error in watchPosition')
@@ -75,13 +69,10 @@ export default {
   },
   methods: {
     handleLocationError: function (browserHasGeolocation) {
-      alert('Error')
-      var pos = this.map.getCenter()
-      this.infoWindow.setPosition(pos)
-      this.infoWindow.setContent(browserHasGeolocation
-        ? 'Error: The Geolocation service failed.'
-        : 'Error: Your browser doesn\'t support geolocation.')
-      this.infoWindow.open(this.map)
+      alert('Error: ' +
+        browserHasGeolocation
+          ? 'Error: The Geolocation service failed.'
+          : 'Error: Your browser doesn\'t support geolocation.')
     },
     getRandomArbitrary: function (min, max) {
       return Math.random() * (max - min) + min
@@ -99,7 +90,6 @@ export default {
       }
 
       var R = 6371 // km
-
       var x1 = lat2 - lat1
       var dLat = toRad(x1)
       var x2 = lon2 - lon1
@@ -112,7 +102,11 @@ export default {
 
       return Number(d * 1000).toFixed(3)
     },
-    updateLocation: function (pos) {
+    updateLocation: function (position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      }
       var dist = this.computeHaversineDist(
         pos.lat, pos.lng, this.targetPos.lat, this.targetPos.lng)
       if (dist < 3.0) {        // distance in meters
