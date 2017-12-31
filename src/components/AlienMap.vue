@@ -1,20 +1,20 @@
 <template>
-  <gmap-map
+  <GmapMap
     ref="main-map"
     :center="center"
     :zoom="20"
     style="width: 100%; height: 600px"
   >
-    <gmap-marker
-      position: player-pos,
-      icon: '/static/images/blue_ring.png'
-    ></gmap-marker>
-    <gmap-marker
-      position: target,
-      icon: '/static/images/alien.png',
-      animation: google.maps.Animation.BOUNCE
-    ></gmap-marker>
-  </gmap-map>
+    <GmapMarker
+      :position="playerPos"
+      icon= '/static/images/blue_ring.png'
+    />
+    <GmapMarker
+      :position="targetPos"
+      icon="/static/images/alien.png"
+      :animation=1
+    />
+  </GmapMap>
 </template>
 
 <script>
@@ -23,8 +23,7 @@ import Vue from 'vue'
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyDoJAcxxMYCl2yudzcCLa70oZHgTm3TuLU',
-    libraries: 'geometry'
+    key: 'AIzaSyDoJAcxxMYCl2yudzcCLa70oZHgTm3TuLU'
   }
 })
 
@@ -37,7 +36,7 @@ export default {
       infoWindow: null,
       playerPos: {lat: 20.0, lng: 20.0},
       center: {lat: 10.0, lng: 10.0},
-      target: {lat: 20.0, lng: 20.0}
+      targetPos: {lat: 20.0, lng: 20.0}
     }
   },
   mounted: function () {
@@ -49,7 +48,7 @@ export default {
           lng: position.coords.longitude
         }
         this.center = pos
-        this.createTarget(pos)
+        this.targetPos = this.getNearbyPos(pos)
       }, () => {
         this.handleLocationError(true)
       })
@@ -87,11 +86,12 @@ export default {
     getRandomArbitrary: function (min, max) {
       return Math.random() * (max - min) + min
     },
-    createTarget: function (position) {
-      this.target = position
+    getNearbyPos: function (pos, latOffsetInMeters = 10, lngOffsetInMeters = 10) {
+      var returnPos = Object.assign({}, pos)
       var degreesForOneMeter = 0.00002
-      this.target.lat += this.getRandomArbitrary(-10, 10) * degreesForOneMeter
-      this.target.lng += this.getRandomArbitrary(-10, 10) * degreesForOneMeter
+      returnPos.lat += this.getRandomArbitrary(-latOffsetInMeters, latOffsetInMeters) * degreesForOneMeter
+      returnPos.lng += this.getRandomArbitrary(-lngOffsetInMeters, lngOffsetInMeters) * degreesForOneMeter
+      return returnPos
     },
     computeHaversineDist: function (lat1, lon1, lat2, lon2) {
       function toRad (x) {
@@ -114,14 +114,12 @@ export default {
     },
     updateLocation: function (pos) {
       var dist = this.computeHaversineDist(
-        pos.lat, pos.lng, this.target.lat, this.target.lng)
+        pos.lat, pos.lng, this.targetPos.lat, this.targetPos.lng)
       if (dist < 3.0) {        // distance in meters
         alert('You win!')
-        this.createTarget(pos)
+        this.targetPos = this.getNearbyPos(pos)
       }
-      this.playerPos.lat = pos.lat
-      this.playerPos.lng = pos.lng
-      this.center = pos
+      this.playerPos = pos
     }
   }
 }
