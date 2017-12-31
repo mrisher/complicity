@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     advanceScene: function (event) {
-      if (this.sceneItem.timeout && event.type === 'click') {
+      if (event && this.sceneItem.timeout && event.type === 'click') {
         clearTimeout(this.timeout)
       }
       this.$emit('advanceScene')

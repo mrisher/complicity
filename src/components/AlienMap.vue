@@ -111,15 +111,11 @@ export default {
 
       return Number(d * 1000).toFixed(3)
     },
-    updateLocation: function (position) {
-      var pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      }
+    checkForCollision: function () {
       var dist
       if (this.targets.length) {
         this.targets.forEach((target, index) => {
-          dist = this.computeHaversineDist(pos.lat, pos.lng, target.lat, target.lng)
+          dist = this.computeHaversineDist(this.playerPos.lat, this.playerPos.lng, target.lat, target.lng)
           if (dist < 3.0) {        // distance in meters
             alert('You caught #' + index)
             this.targets.splice(index, 1)  // remove 'index'
@@ -129,7 +125,19 @@ export default {
           }
         })
       }
+    },
+    updateLocation: function (position) {
+      if (position.coords.accuracy > 50) {
+        // if accuracy is poor, reject this sample
+        // return
+      }
+
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      }
       this.playerPos = pos
+      this.checkForCollision()
     }
   }
 }
